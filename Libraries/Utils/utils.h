@@ -20,4 +20,7 @@
 
 void Led_Init();
 void BlinkLed();
+
+void Timer0_Init();//millis
+
 #endif /* LIBRARIES_UTILS_UTILS_H_ */

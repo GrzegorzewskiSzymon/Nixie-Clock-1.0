@@ -22,6 +22,6 @@
 #define DISPLAY_9 PORTD &=~ 0b00001111; PORTD |= 0b00001001
 
 void BCD_Init();
-
+void DisplayTime(uint8_t hours, uint8_t minutes);//This function overwrite whole PORTD which could lead to problems in future
 
 #endif /* LIBRARIES_NIXIEDRIVERS_SN74141_H_ */

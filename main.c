@@ -8,12 +8,14 @@
 #include "Libraries/NixieDrivers/AnodesMultiplexer.h"
 #include "Libraries/Utils/utils.h"
 
+
+
 int main(void)
 {
 	//visual confirmation of start
 	Led_Init();
 	BlinkLed();
-
+	Timer0_Init();//for milis
 	Anodes_Init();
 	BCD_Init();
 
@@ -21,12 +23,10 @@ int main(void)
 	RtcInit();
 
 
-
-
 	uint8_t seconds, minutes, hours;
 	while (1)
 	{
-
+		DisplayTime(hours, minutes);
 	}
 }
 

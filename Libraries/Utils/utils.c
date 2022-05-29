@@ -23,7 +23,7 @@ void BlinkLed()
 	LED1_OFF;
 }
 
-uint32_t millis;
+uint64_t millis;
 void Timer0_Init()
 {
 	sei();// allow interrupts

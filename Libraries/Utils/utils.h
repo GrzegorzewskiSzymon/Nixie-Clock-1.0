@@ -21,6 +21,8 @@
 void Led_Init();
 void BlinkLed();
 
+
 void Timer0_Init();//millis
+extern uint64_t millis;
 
 #endif /* LIBRARIES_UTILS_UTILS_H_ */

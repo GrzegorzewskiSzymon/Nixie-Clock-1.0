@@ -4,6 +4,8 @@
 
 #include "Libraries/RTC/i2c.h"
 #include "Libraries/RTC/pcf8583.h"
+#include "Libraries/NixieDrivers/SN74141.h"
+#include "Libraries/NixieDrivers/AnodesMultiplexer.h"
 #include "Libraries/Utils/utils.h"
 
 int main(void)
@@ -12,26 +14,18 @@ int main(void)
 	Led_Init();
 	BlinkLed();
 
+	Anodes_Init();
+	BCD_Init();
+
 	//Put actual hour to rtc
 	RtcInit();
 
 
+
+
 	uint8_t seconds, minutes, hours;
-	while (1) {
-
-		RtcReadData(&seconds, &minutes, &hours);
-
-
-//		if(seconds >= 1)
-//			LED0_ON;
-//		else
-//			LED0_OFF;
-//
-//		if(seconds >= 5)
-//			LED1_ON;
-//		else
-//			LED1_OFF;
-//		_delay_ms(100);
+	while (1)
+	{
 
 	}
 }

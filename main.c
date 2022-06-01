@@ -16,8 +16,11 @@ int main(void)
 	Led_Init();
 	BlinkLed();
 	Timer0_Init();//for milis
+
 	Anodes_Init();
 	BCD_Init();
+
+	SwitchInit(&Switch_0, &Switch_1);//Numerate switches
 
 	//Put actual hour to rtc
 	RtcInit();
@@ -26,7 +29,9 @@ int main(void)
 	uint8_t seconds, minutes, hours;
 	while (1)
 	{
+		RtcReadData(&seconds, &minutes, &hours);
 		DisplayTime(hours, minutes);
+
 	}
 }
 

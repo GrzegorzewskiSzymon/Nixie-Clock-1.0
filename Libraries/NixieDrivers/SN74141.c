@@ -17,7 +17,7 @@ void BCD_Init()
 }
 
 uint32_t millis_DisplayTime = 0;
-void DisplayTime(uint8_t hours, uint8_t minutes)
+void DisplayTime(int8_t hours, int8_t minutes)
 {
 	if(millis-millis_DisplayTime > 12)//Its time to display units of minutes
 	{

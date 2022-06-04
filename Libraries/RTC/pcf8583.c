@@ -20,51 +20,56 @@ uint8_t BCDToDec(uint8_t bcd){
 void RtcInit()
 {
 	//[0]milis, [1]seconds, [2]minutes, [3]hours
-	int8_t buffer[4] = {0,0,30,12};
+	int8_t buffer[4] = {0,0,0,12};
 	uint64_t millis_Switch = millis;
 	while(millis - millis_Switch <5000)
 	{
 		LED0_ON;
+
+		//check state of buttons
 		StateMachine(&Switch_0);
 		StateMachine(&Switch_1);
 
-
-
-
 		if(buffer[2] != Switch_0.counterData - Switch_1.counterData) //if any of buttons were pressed
-			millis_Switch = millis;
+			millis_Switch = millis; //reset millis to give time to change time
 
 		buffer[2] = Switch_0.counterData - Switch_1.counterData;
 
-		if(buffer[2] >= 60)
+		if(buffer[2] >= 60)//60 min turns to 1 hour
 		{
 			Switch_0.counterData = 0;
 			Switch_1.counterData = 0;
 			buffer[3]++;
 		}
+
 		if(buffer[3] > 23) buffer[3] = 0;
 
-		if(buffer[2] <= -1)
+		if(buffer[2] <= -1) //-1 in minutes need to be compensated by decreasing hour and setting minutes to 59
 		{
-			Switch_0.counterData = 0;
+			Switch_0.counterData = 59; //set minutes to 59
 			Switch_1.counterData = 0;
-			if(buffer[3])buffer[3]--;
+
+			if(buffer[3])
+				buffer[3]--;
 			else
-			{
-				buffer[2] = buffer[3] = 0;
-			}
+				buffer[3] = 23;//decreasing from 00:00 goes to 23:59
 		}
 
 		DisplayTime(buffer[3], buffer[2]);
 	}
-	LED0_OFF;
 
-	for(uint8_t i=0; i<4; i++)
+	/*********only if user tried to change time********/
+	if(buffer[3] != 12 || buffer[2] != 0)
 	{
-		buffer[i] = DecToBCD(buffer[i]);
-	}
+		/*************uploading new time to RTC************/
+		for(uint8_t i=0; i<4; i++)
+			buffer[i] = DecToBCD(buffer[i]);
 
-	TWI_Write_Buf(0xA0, 0x01, 4, buffer);
+		TWI_Write_Buf(0xA0, 0x01, 4, buffer);
+	}
+	/******************************************************/
+
+	LED0_OFF;
 }
 
 void RtcReadData(uint8_t *seconds, uint8_t *minutes, uint8_t *hours )

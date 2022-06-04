@@ -34,8 +34,8 @@ void BlinkLed();
 #define SW_1_IS_PUSHED !(PIND & (1<<PD6))
 
 #define DEBOUNCE_TIME 20 //ms;
-#define LONG_PRESS_TIME 2500 //ms;  time to press turns to long press
-#define LONG_PRESS_TIME_CYCLE 150 //ms;
+#define LONG_PRESS_TIME 2000 //ms;  time to press turns to long press
+#define LONG_PRESS_TIME_CYCLE 60 //ms;
 
 typedef enum
 {

@@ -21,6 +21,10 @@
 #define DISPLAY_8 PORTD &=~ 0b00001111; PORTD |= 0b00001000
 #define DISPLAY_9 PORTD &=~ 0b00001111; PORTD |= 0b00001001
 
+
+#define TIME_BETWEEN_SLOW_MULTIPLEXING 5 //in minutes
+#define TIME_OF_SLOW_MULTIPLEXING 0.5 //in minutes
+
 void BCD_Init();
 void DisplayTime(int8_t hours, int8_t minutes);//This function overwrite whole PORTD which could lead to problems in future
 

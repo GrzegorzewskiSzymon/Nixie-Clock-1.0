@@ -16,10 +16,26 @@ void BCD_Init()
 	BCD_INIT;
 }
 
-uint32_t millis_DisplayTime = 0;
+uint64_t millis_DisplayTime = 0;
+uint64_t millis_SlowMultiplexing = 0;
 void DisplayTime(int8_t hours, int8_t minutes)
 {
-	if(millis-millis_DisplayTime > 12)//Its time to display units of minutes
+	uint16_t slower = 1;
+	if(millis-millis_SlowMultiplexing > (1000ULL*60ULL*TIME_BETWEEN_SLOW_MULTIPLEXING))//when it's  time to "repair" balance in nixie tubes
+	{
+		LED1_ON;
+		slower = 400;
+	}
+	if(millis-millis_SlowMultiplexing > ((1000ULL*60ULL*TIME_BETWEEN_SLOW_MULTIPLEXING)+(1000ULL*60ULL*TIME_OF_SLOW_MULTIPLEXING)) )
+	{
+		LED1_OFF;
+		slower = 1;
+		millis_SlowMultiplexing = millis;
+
+	}
+
+
+	if(millis-millis_DisplayTime > 12*slower)//Its time to display units of minutes
 	{
 		PORTD = minutes%10;
 
@@ -32,7 +48,7 @@ void DisplayTime(int8_t hours, int8_t minutes)
 		return;
 	}
 
-	if(millis-millis_DisplayTime > 9)//Its time to display tens of minutes
+	if(millis-millis_DisplayTime > 9*slower)//Its time to display tens of minutes
 	{
 		PORTD = minutes/10;
 
@@ -44,7 +60,7 @@ void DisplayTime(int8_t hours, int8_t minutes)
 		return;
 	}
 
-	if(millis-millis_DisplayTime > 6)//Its time to display units of hours
+	if(millis-millis_DisplayTime > 6*slower)//Its time to display units of hours
 	{
 		PORTD = hours%10;
 		NIXIE_4_OFF;
@@ -55,7 +71,7 @@ void DisplayTime(int8_t hours, int8_t minutes)
 		return;
 	}
 
-	if(millis-millis_DisplayTime > 3 &&hours > 9)//Its time to display tens of hours
+	if(millis-millis_DisplayTime > 3*slower &&hours > 9)//Its time to display tens of hours
 	{
 		PORTD = hours/10;
 		NIXIE_4_ON;
